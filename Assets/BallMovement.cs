@@ -10,7 +10,7 @@ public class BallMovement : MonoBehaviour
   float x = 0;
   float y = 0;
 
-  float r;
+  float r = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -43,4 +43,12 @@ public class BallMovement : MonoBehaviour
       return (float)val
       ;
     }
+
+    public void setDirection(Vector3 _direction){
+      Debug.Log("direcction from : " + direction + " setting to : " + _direction);
+
+      direction = _direction;
+    }
+
+
   }

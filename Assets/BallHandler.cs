@@ -9,10 +9,16 @@ public class BallHandler : MonoBehaviour
 
   [SerializeField]
   List<BallMovement> Balls = new List<BallMovement>();
+
+  [SerializeField]
+  List<BallMovement> temp;
+
+  float radius = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
       Balls.AddRange(GameObject.FindObjectsOfType<BallMovement>());
+      temp = new List<BallMovement>(Balls);
       collidables.AddRange(GameObject.FindObjectsOfType<BoundingBox>());
     }
 
@@ -21,14 +27,59 @@ public class BallHandler : MonoBehaviour
     {
       foreach(BallMovement b in Balls){
         CheckEnvCollision(b);
+        checkBallCollision(b);
+      }
+    }
+
+    void checkBallCollision(BallMovement b){
+      if(temp.Count == 0 || temp.Count == 1){
+        temp = new List<BallMovement>(Balls);
+      }
+
+      temp.Remove(b);
+
+      foreach(BallMovement _b in temp.ToArray()){
+        Vector3 distance = b.transform.position - _b.transform.position;
+        Debug.Log("Distance vector is : " + distance);
+        float dist = System.Math.Abs(distance.magnitude);
+
+        if(dist < radius * 2f){
+          temp.Remove(_b);
+          Debug.Log("Collision :o");
+          Debug.Log("DISTANCE IS: " + dist + "  COMPARE:  " + radius*2f);
+          Vector3 temp_direction = b.direction;
+          b.setDirection(_b.direction);
+          _b.setDirection(temp_direction);
+
+          // if(b.transform.position.x > _b.transform.position.x){
+          //   b.transform.position = new Vector3(b.transform.position.x + System.Math.Abs(distance.x), b.transform.position.y, 0);
+          //   _b.transform.position = new Vector3(_b.transform.position.x - System.Math.Abs(distance.x), _b.transform.position.y, 0);
+          // }
+          // else{
+          //   b.transform.position = new Vector3(b.transform.position.x - System.Math.Abs(distance.x), b.transform.position.y, 0);
+          //   _b.transform.position = new Vector3(_b.transform.position.x + System.Math.Abs(distance.x), _b.transform.position.y, 0);
+          // }
+          //
+          // if(b.transform.position.x > _b.transform.position.x){
+          //   b.transform.position = new Vector3(b.transform.position.x, b.transform.position.y + System.Math.Abs(distance.y), 0);
+          //   _b.transform.position = new Vector3(_b.transform.position.x, _b.transform.position.y - System.Math.Abs(distance.y), 0);
+          // }
+          // else{
+          //   b.transform.position = new Vector3(b.transform.position.x, b.transform.position.y - System.Math.Abs(distance.y), 0);
+          //   _b.transform.position = new Vector3(_b.transform.position.x, _b.transform.position.y + System.Math.Abs(distance.y), 0);
+          // }
+
+          GameObject collision_point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+          collision_point.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
+          collision_point.transform.position = distance;
+          //b.transform.position += new Vector3(1,0,0);
+        }
       }
     }
 
     void CheckEnvCollision(BallMovement b){
       float y = b.transform.position.y;
       float x = b.transform.position.x;
-
-      float radius = 0.5f;
 
       foreach(BoundingBox child in collidables){
         if(child.CompareTag("Wall")){
