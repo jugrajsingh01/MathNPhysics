@@ -7,24 +7,30 @@ public class BallMovement : MonoBehaviour
 {
   [SerializeField]
   public Vector3 direction;
-  float x = 0;
-  float y = 0;
 
-  float r = 0.1f;
+  float x;
+  float y;
+
+  public float radius = 2.5f;
+
+  public float velocity = 0.5f;
+
+  //float r = 0.1f;
 
     // Start is called before the first frame update
     void Start()
     {
       x = NextFloat(-180f, 180f);
       y = NextFloat(-180f, 180f);
+      velocity = NextFloat(0.1f, 1f);
 
       direction = new Vector3(x, y, 0);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-      transform.position += direction.normalized * 10 * Time.deltaTime;
+      transform.position += direction.normalized * velocity * Time.deltaTime;
     }
 
     void OnDrawGizmos()
@@ -35,6 +41,8 @@ public class BallMovement : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, direction.normalized);
+
+
     }
 
     float NextFloat(float min, float max){
@@ -44,11 +52,8 @@ public class BallMovement : MonoBehaviour
       ;
     }
 
-    public void setDirection(Vector3 _direction){
-      Debug.Log("direcction from : " + direction + " setting to : " + _direction);
-
+    public void setDirection(Vector3 _direction, float vel){
       direction = _direction;
+      velocity = vel;
     }
-
-
   }

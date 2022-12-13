@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class BallHandler : MonoBehaviour
 {
+  static int i = 0;
   [SerializeField]
   List<BoundingBox> collidables = new List<BoundingBox>();
 
   [SerializeField]
   List<BallMovement> Balls = new List<BallMovement>();
+
+  [SerializeField]
+  List<PerfectBounce> perfectBouncingBalls = new List<PerfectBounce>();
 
   [SerializeField]
   List<BallMovement> temp;
@@ -22,57 +26,50 @@ public class BallHandler : MonoBehaviour
       collidables.AddRange(GameObject.FindObjectsOfType<BoundingBox>());
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-      foreach(BallMovement b in Balls){
-        CheckEnvCollision(b);
-        checkBallCollision(b);
+      foreach(PerfectBounce pb in perfectBouncingBalls){
+        Bounce(pb);
       }
+      // foreach(BallMovement b in Balls){
+      //   CheckEnvCollision(b);
+      //   checkBallCollision(b);
+      // }
+    }
+
+    void Bounce(PerfectBounce b){
+        Vector3 movement = new Vector3(0, 0, 0);
     }
 
     void checkBallCollision(BallMovement b){
       if(temp.Count == 0 || temp.Count == 1){
         temp = new List<BallMovement>(Balls);
       }
-
       temp.Remove(b);
 
       foreach(BallMovement _b in temp.ToArray()){
         Vector3 distance = b.transform.position - _b.transform.position;
-        Debug.Log("Distance vector is : " + distance);
         float dist = System.Math.Abs(distance.magnitude);
 
         if(dist < radius * 2f){
+          i++;
+          Debug.Log(i);
           temp.Remove(_b);
-          Debug.Log("Collision :o");
-          Debug.Log("DISTANCE IS: " + dist + "  COMPARE:  " + radius*2f);
+
           Vector3 temp_direction = b.direction;
-          b.setDirection(_b.direction);
-          _b.setDirection(temp_direction);
 
-          // if(b.transform.position.x > _b.transform.position.x){
-          //   b.transform.position = new Vector3(b.transform.position.x + System.Math.Abs(distance.x), b.transform.position.y, 0);
-          //   _b.transform.position = new Vector3(_b.transform.position.x - System.Math.Abs(distance.x), _b.transform.position.y, 0);
-          // }
-          // else{
-          //   b.transform.position = new Vector3(b.transform.position.x - System.Math.Abs(distance.x), b.transform.position.y, 0);
-          //   _b.transform.position = new Vector3(_b.transform.position.x + System.Math.Abs(distance.x), _b.transform.position.y, 0);
-          // }
-          //
-          // if(b.transform.position.x > _b.transform.position.x){
-          //   b.transform.position = new Vector3(b.transform.position.x, b.transform.position.y + System.Math.Abs(distance.y), 0);
-          //   _b.transform.position = new Vector3(_b.transform.position.x, _b.transform.position.y - System.Math.Abs(distance.y), 0);
-          // }
-          // else{
-          //   b.transform.position = new Vector3(b.transform.position.x, b.transform.position.y - System.Math.Abs(distance.y), 0);
-          //   _b.transform.position = new Vector3(_b.transform.position.x, _b.transform.position.y + System.Math.Abs(distance.y), 0);
-          // }
+          b.transform.position = (Vector3.Normalize(distance) * 1f) + _b.transform.position;
 
-          GameObject collision_point = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-          collision_point.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
-          collision_point.transform.position = distance;
-          //b.transform.position += new Vector3(1,0,0);
+          distance = new Vector3(distance.y * -1f, distance.x, 0);
+
+          Debug.DrawRay(b.transform.position, distance, Color.green, 5f);
+          //Debug.Break();
+
+
+          float temp_vel = b.velocity;
+          b.setDirection(Vector3.Reflect(_b.direction, distance), _b.velocity);
+
+          _b.setDirection(Vector3.Reflect(temp_direction, distance), temp_vel);
         }
       }
     }
@@ -84,7 +81,7 @@ public class BallHandler : MonoBehaviour
       foreach(BoundingBox child in collidables){
         if(child.CompareTag("Wall")){
           if(((child.center.x + child.half_x) + 2 * radius > b.transform.position.x) && (child.center.x - child.half_x < b.transform.position.x - radius && b.transform.position.x - radius < child.center.x + child.half_x) && (b.transform.position.y < child.center.y + child.half_y && b.transform.position.y > child.center.y - child.half_y)){
-            Debug.Log("LEFT WALL");
+
 
             //PUSH BACK
             Vector3 temp = b.transform.position;
@@ -95,7 +92,7 @@ public class BallHandler : MonoBehaviour
           }
 
           if(((child.center.x - child.half_x) - 2 * radius < b.transform.position.x) && (child.center.x - child.half_x  < b.transform.position.x + radius && b.transform.position.x + radius < child.center.x + child.half_x) && (b.transform.position.y < child.center.y + child.half_y && b.transform.position.y > child.center.y - child.half_y)){
-            Debug.Log("RIGHT WALL");
+
 
             Vector3 temp = b.transform.position;
             b.transform.position = new Vector3((child.center.x - child.half_x) - 1 * radius, temp.y, 0);
@@ -105,7 +102,7 @@ public class BallHandler : MonoBehaviour
           }
 
           if(((child.center.y - child.half_y) - 2 * radius < b.transform.position.y) && (child.center.y - child.half_y  < b.transform.position.y + radius && b.transform.position.y + radius < child.center.y + child.half_y) && (b.transform.position.x < child.center.x + child.half_x && b.transform.position.x > child.center.x - child.half_x)){
-            Debug.Log("UP WALL");
+
 
             Vector3 temp = b.transform.position;
             b.transform.position = new Vector3(temp.x, (child.center.y - child.half_y) - 1 * radius, 0);
@@ -115,7 +112,6 @@ public class BallHandler : MonoBehaviour
           }
 
           if(((child.center.y + child.half_y) + 2 * radius > b.transform.position.y) && (child.center.y - child.half_y  < b.transform.position.y - radius && b.transform.position.y - radius < child.center.y + child.half_y) && (b.transform.position.x < child.center.x + child.half_x && b.transform.position.x > child.center.x - child.half_x)){
-            Debug.Log("DOWN WALL");
 
             Vector3 temp = b.transform.position;
             b.transform.position = new Vector3(temp.x, (child.center.y + child.half_y) + 1 * radius, 0);
@@ -123,9 +119,6 @@ public class BallHandler : MonoBehaviour
             b.direction = Vector3.Reflect(b.direction, Vector3.up);
             break;
           }
-        }
-        else if(child.CompareTag("Ground")){
-
         }
       }
     }
