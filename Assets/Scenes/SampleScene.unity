@@ -391,6 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &403400877
@@ -769,6 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &542760409
@@ -984,6 +986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &729174959
@@ -1084,6 +1087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &761028634
@@ -1184,6 +1188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &764184300
@@ -1345,8 +1350,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
-  velocity: 0.5
-  dv: 0
+  a: -9.8
+  radius: 0
+  velocity: 1
 --- !u!212 &870039957
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1407,7 +1413,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870039955}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14, y: -7, z: 0}
+  m_LocalPosition: {x: -14, y: -8, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1445,6 +1451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &918832484
@@ -1524,6 +1531,7 @@ GameObject:
   m_Component:
   - component: {fileID: 921487116}
   - component: {fileID: 921487115}
+  - component: {fileID: 921487117}
   m_Layer: 0
   m_Name: Elastic1
   m_TagString: Ball
@@ -1591,13 +1599,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921487114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14, y: -2, z: 0}
+  m_LocalPosition: {x: -14, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &921487117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921487114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73801ce52da4b4cd98f72120777ac287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0, z: 0}
+  a: -9.8
+  radius: 0
+  velocity: 0
 --- !u!1 &986581493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,6 +1653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &986581495
@@ -1839,6 +1864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1089238017
@@ -1939,6 +1965,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1099246387
@@ -2039,6 +2066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1164450339
@@ -2118,6 +2146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1189868941}
   - component: {fileID: 1189868940}
+  - component: {fileID: 1189868942}
   m_Layer: 0
   m_Name: Elastic2
   m_TagString: Ball
@@ -2192,6 +2221,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1189868942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189868939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b81a6e2200f604e83c83bc1fcacdae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0, z: 0}
+  a: -9.8
+  radius: 0
+  velocity: 0
+  bounciness: 0.5
 --- !u!1 &1229588392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1276283427
@@ -2433,6 +2480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1419235799
@@ -2533,6 +2581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1452908226
@@ -2717,6 +2766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1545261596
@@ -2817,6 +2867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1631418009
@@ -2917,6 +2968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
+  a: 9.8
   radius: 2.5
   velocity: 0.5
 --- !u!212 &1649794833
@@ -3032,7 +3084,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collidables: []
   Balls: []
-  perfectBouncingBalls: []
   temp: []
 --- !u!1 &1889730791
 GameObject:
