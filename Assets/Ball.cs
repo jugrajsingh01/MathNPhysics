@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using static System.Random;
 
-public class Ball : MonoBehaviour
+public class Ball : Box
 {
     [SerializeField]
     public Vector3 direction;
 
-    float x;
-    float y;
+
 
     public float a = 9.8f;
 
