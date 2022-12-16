@@ -17,9 +17,18 @@ public class BoundingBox : MonoBehaviour
       half_x = transform.localScale.x / 2f;
     }
 
+    public BoundingBox(Transform gameObject)
+    {
+        this.half_y = gameObject.localScale.y / 2f;
+        this.half_x = gameObject.localScale.x / 2f;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        center = transform.position;
 
+        half_y = transform.localScale.y / 2f;
+        half_x = transform.localScale.x / 2f;
     }
 }

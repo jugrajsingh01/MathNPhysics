@@ -6,7 +6,7 @@ public class BallHandler : MonoBehaviour
 {
     static int i = 0;
     [SerializeField]
-    List<BoundingBox> collidables = new List<BoundingBox>();
+    List<Wall> collidables = new List<Wall>();
 
     [SerializeField]
     List<Ball> Balls = new List<Ball>();
@@ -19,7 +19,7 @@ public class BallHandler : MonoBehaviour
     {
         Balls.AddRange(GameObject.FindObjectsOfType<Ball>());
         temp = new List<Ball>(Balls);
-        collidables.AddRange(GameObject.FindObjectsOfType<BoundingBox>());
+        collidables.AddRange(GameObject.FindObjectsOfType<Wall>());
     }
 
     void FixedUpdate()
@@ -77,31 +77,32 @@ public class BallHandler : MonoBehaviour
         float y = b.transform.position.y;
         float x = b.transform.position.x;
 
-        foreach (BoundingBox child in collidables)
+        foreach (Wall _child in collidables)
         {
+            BoundingBox child = _child._BoundingBox;
             if (child.CompareTag("Wall"))
             {
                 if (((child.center.x + child.half_x) + 2 * b.radius > b.transform.position.x) && (child.center.x - child.half_x < b.transform.position.x - b.radius && b.transform.position.x - b.radius < child.center.x + child.half_x) && (b.transform.position.y < child.center.y + child.half_y && b.transform.position.y > child.center.y - child.half_y))
                 {
-                    b.onEnvCollision(child, "LEFT");
+                    b.onEnvCollision(_child, "LEFT");
                     return true;
                 }
 
                 if (((child.center.x - child.half_x) - 2 * b.radius < b.transform.position.x) && (child.center.x - child.half_x < b.transform.position.x + b.radius && b.transform.position.x + b.radius < child.center.x + child.half_x) && (b.transform.position.y < child.center.y + child.half_y && b.transform.position.y > child.center.y - child.half_y))
                 {
-                    b.onEnvCollision(child, "RIGHT");
+                    b.onEnvCollision(_child, "RIGHT");
                     return true;
                 }
 
                 if (((child.center.y - child.half_y) - 2 * b.radius < b.transform.position.y) && (child.center.y - child.half_y < b.transform.position.y + b.radius && b.transform.position.y + b.radius < child.center.y + child.half_y) && (b.transform.position.x < child.center.x + child.half_x && b.transform.position.x > child.center.x - child.half_x))
                 {
-                    b.onEnvCollision(child, "DOWN");
+                    b.onEnvCollision(_child, "DOWN");
                     return true;
                 }
 
                 if (((child.center.y + child.half_y) + 2 * b.radius > b.transform.position.y) && (child.center.y - child.half_y < b.transform.position.y - b.radius && b.transform.position.y - b.radius < child.center.y + child.half_y) && (b.transform.position.x < child.center.x + child.half_x && b.transform.position.x > child.center.x - child.half_x))
                 {
-                    b.onEnvCollision(child, "UP");
+                    b.onEnvCollision(_child, "UP");
                     return true;
                 }
             }

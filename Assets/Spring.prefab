@@ -145,10 +145,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myLineRenderer: {fileID: 7482959436357745380}
   points: 10
-  xLimits: {x: 0, y: 1}
   y_range: -1
   k: -1
   restLength: {x: 0, y: 0, z: 0}
+  velocity: 0
+  init: 1
+  springPos: 1
   box: {fileID: 7482959436381318356}
 --- !u!1 &7482959436381318353
 GameObject:
@@ -176,7 +178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7482959436381318353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: -0.837039, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -247,6 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c89e09fca6b0a448a4c8ccc40d65d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x: 0
+  y: 0
 --- !u!1 &7482959437987616763
 GameObject:
   m_ObjectHideFlags: 0

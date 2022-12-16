@@ -3,20 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using static System.Random;
 
-public class Ball : Box
+public class Ball : PObject
 {
     [SerializeField]
-    public Vector3 direction;
-
-
-
-    public float a = 9.8f;
-
-    [SerializeField]
     public float radius;
-
-    [SerializeField]
-    public float velocity;
 
     //float r = 0.1f;
 
@@ -27,7 +17,7 @@ public class Ball : Box
 
         x = NextFloat(-180f, 180f);
         y = NextFloat(-180f, 180f);
-        velocity = NextFloat(0.1f, 1f);
+        velocity = NextFloat(0.1f, 5f);
 
         direction = new Vector3(x, y, 0);
     }
@@ -64,14 +54,23 @@ public class Ball : Box
         velocity = vel;
     }
 
-    public virtual void onEnvCollision(BoundingBox hit, string side)
+    public override void onEnvCollision(PObject _hit, string side)
     {
+        BoundingBox hit = _hit._BoundingBox;
         if (string.Equals(side, "LEFT"))
         {
             Vector3 temp = transform.position;
             transform.position = new Vector3((hit.center.x + hit.half_x) + 1 * radius, temp.y, 0);
 
-            direction = Vector3.Reflect(direction, Vector3.left);
+            if (!(_hit.pot_energy > 0.01f)) {
+                direction = Vector3.Reflect(direction, Vector3.left);
+            }
+            else
+            {
+                direction = _hit.direction;
+                velocity = _hit.velocity;
+            }
+
         }
         if (string.Equals(side, "RIGHT"))
         {

@@ -24,9 +24,9 @@ public class RealisticBall : Ball
         transform.position += new Vector3(0, y_pos, 0);
     }
 
-    public override void onEnvCollision(BoundingBox hit, string side)
+    public override void onEnvCollision(PObject _hit, string side)
     {
-        base.onEnvCollision(hit, side);
+        base.onEnvCollision(_hit, side);
 
         velocity = this.velocity * -1 * bounciness;
     }
