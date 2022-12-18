@@ -8,18 +8,21 @@ public class Ball : PObject
     [SerializeField]
     public float radius;
 
+    [SerializeField]
+    public bool randomize = true;
+
     //float r = 0.1f;
 
     // Start is called before the first frame update
     void Start()
     {
         radius = transform.localScale.x / 2f;
-
-        x = NextFloat(-180f, 180f);
-        y = NextFloat(-180f, 180f);
-        velocity = NextFloat(0.1f, 5f);
-
-        direction = new Vector3(x, y, 0);
+        if(randomize){
+          x = NextFloat(-180f, 180f);
+          y = NextFloat(-180f, 180f);
+          velocity = NextFloat(0.1f, 5f);
+          direction = new Vector3(x, y, 0);
+        }
     }
 
     // Update is called once per frame

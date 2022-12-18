@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Spring : PObject
 {
-    public GameObject anchorpoint;
+  [SerializeField]
+    public GameObject _anchorpoint;
     public LineRenderer myLineRenderer;
     public int points;
     public float y_range = 1;
@@ -13,15 +14,20 @@ public class Spring : PObject
     public float _velocity = 0f;
     public bool init = true;
     public float springPos = 1f;
+    public float dv = 0f;
+
+    [SerializeField]
+    public Spring spring;
 
     [SerializeField]
     public Wall box;
 
     void Start()
     {
-        if(anchorpoint != null)
+        if(_anchorpoint != null)
         {
-            transform.position = anchorpoint.transform.position;
+            spring = _anchorpoint.GetComponent<Spring>();
+            transform.position = spring.box.transform.position;
         }
         _velocity = velocity;
         //myLineRenderer = GetComponent<LineRenderer>();
@@ -33,9 +39,9 @@ public class Spring : PObject
 
     void Draw(float time = 1f, float x = 1f)
     {
-        if (anchorpoint != null)
+        if (_anchorpoint != null)
         {
-            transform.position = anchorpoint.transform.position;
+            transform.position = spring.box.transform.position;
         }
         myLineRenderer.positionCount = points;
         for (int currentPoint = 0; currentPoint < points; currentPoint++)
@@ -59,7 +65,7 @@ public class Spring : PObject
                 {
                     box.transform.localPosition = new Vector3((myLineRenderer.transform.localPosition.x + currentPoint + (box.transform.localScale.x / 2f)) / x, myLineRenderer.transform.localPosition.y, 0);
                     //restLength = new Vector3(box.transform.localPosition.x, 0, 0); it can now be custom set
-                    //waarom comment ik in het engels de docent kan gewoon nederlands 
+                    //waarom comment ik in het engels de docent kan gewoon nederlands
 
                 }
                 myLineRenderer.SetPosition(currentPoint, new Vector3((myLineRenderer.transform.localPosition.x + currentPoint) / x, 0, 0));
@@ -73,19 +79,21 @@ public class Spring : PObject
 
     void FixedUpdate()
     {
-        if (anchorpoint != null)
-        {
-            Wall p = anchorpoint.GetComponent<Wall>();
-            velocity += p.pot_energy / p.a * Time.deltaTime;
-            Debug.Log(p.pot_energy);
-        }
+          float delta = box.transform.localPosition.x - restLength.x;
+
+          float force = -k * delta;
+          float pot_force = (float)(-k * 0.5f * System.Math.Pow(delta, 2));
+
+          Debug.Log(pot_force);
+
+          velocity += force;
+
+          if(spring != null && _anchorpoint != null){
+            spring.velocity += pot_force;
+          }
+
         Draw(1f, springPos);
         init = false;
-
-        float delta = box.transform.localPosition.x - restLength.x;
-
-        float force = -k * delta;
-        velocity += force;
 
         float x_pos = velocity * Time.deltaTime;
 
@@ -94,13 +102,15 @@ public class Spring : PObject
         if (!(box.transform.localPosition.x - box._BoundingBox.half_x > myLineRenderer.transform.localPosition.x))
         {
             velocity = velocity * -1f * 0.5f;
+            box.velocity = box.velocity * -1f * 0.5f;
         }
 
         //springPos = 10*x^2−35*x+35
         //springPos = 10 * x ^ 2−35 * x + 35; guess i didnt need this :|
-        //this took way too long to figure out 
+        //this took way too long to figure out
         springPos = restLength.x / box.transform.localPosition.x;
-        box.velocity = velocity;
+
+        box.velocity = pot_force * Time.deltaTime;
         box.direction = new Vector3(1, 0, 0);
 
     }

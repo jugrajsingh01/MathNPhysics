@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Box : PObject
 {
+  public float mass;
     // Start is called_ before the first frame update
     void Start()
     {
@@ -14,5 +15,5 @@ public class Box : PObject
     {
 
     }
-    
+
 }
