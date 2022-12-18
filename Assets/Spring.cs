@@ -84,8 +84,6 @@ public class Spring : PObject
           float force = -k * delta;
           float pot_force = (float)(-k * 0.5f * System.Math.Pow(delta, 2));
 
-          Debug.Log(pot_force);
-
           velocity += force;
 
           if(spring != null && _anchorpoint != null){

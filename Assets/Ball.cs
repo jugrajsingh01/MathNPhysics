@@ -28,7 +28,7 @@ public class Ball : PObject
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position += direction.normalized * velocity * Time.deltaTime;
+        //transform.position += direction.normalized * velocity * Time.deltaTime;
     }
 
     void OnDrawGizmos()

@@ -22,7 +22,7 @@ public class PObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+      //this._BoundingBox = new BoundingBox(this.transform);
     }
 
     // Update is called once per frame
@@ -32,6 +32,6 @@ public class PObject : MonoBehaviour
     }
     public virtual void onEnvCollision(PObject _hit, string side)
     {
-       
+
     }
 }

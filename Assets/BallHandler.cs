@@ -26,32 +26,10 @@ public class BallHandler : MonoBehaviour
     {
         foreach (Ball b in Balls)
         {
+          move(b);
             CheckEnvCollision(b);
             checkBallCollision(b);
         }
-    }
-
-    float collisionReboundSingleAxis (Ball b, Ball _b) {
-      float collisionForce = ((1 - 1) * b.direction.x + (2 * 1 * _b.direction.x)) / (1 + 1);
-      return collisionForce;
-    }
-
-    float[,] invertMatrix2x2 (float[,] matrix) {
-      return new float [,] {{matrix[0, 0], matrix[1, 0]}, {matrix[0, 1], matrix[1, 1]}};
-    }
-
-    float[,] createRotationMatrixFromAngle (float theta) {
-      float cos = (float)System.Math.Cos(theta);
-      float sin = (float)System.Math.Sin(theta);
-
-      return new float [,] {{cos, sin}, {-sin, cos}};
-    }
-
-    Vector3 matrix2x2MultiplyVector2 (float[,] matrix, Vector3 direction) {
-      Vector3 MatrixRow1Vec = new Vector3(matrix[0, 0], matrix[0, 1], 0);
-      Vector3 MatrixRow2Vec = new Vector3(matrix[1, 0], matrix[1, 1], 0);
-
-      return new Vector3(Vector3.Dot(direction, MatrixRow1Vec), Vector3.Dot(direction, MatrixRow2Vec), 0);
     }
 
     void checkBallCollision(Ball b)
@@ -79,7 +57,8 @@ public class BallHandler : MonoBehaviour
 
                 b.transform.position = (Vector3.Normalize(distance) * (_b.radius + b.radius)) + _b.transform.position;
 
-                distance = new Vector3(distance.y * -1f, distance.x, 0);
+                //distance = new Vector3(distance.y * -1f, distance.x, 0);
+
                 /*
                                 Debug.DrawRay(b.transform.position, distance, Color.green, 5f);
                                 //Debug.Break();
@@ -89,40 +68,32 @@ public class BallHandler : MonoBehaviour
                                 _b.setDirection(Vector3.Reflect(temp_direction, distance), temp_vel);*/
 
 
-                float col_angle = (float)System.Math.Atan2(System.Math.Abs(distance.y), System.Math.Abs(distance.x));
+                float col_angle = (float)System.Math.Atan2(distance.y, distance.x);
 
-                Vector3 reboundVelocity1 = new Vector3(0,0,0);
-                Vector3 reboundVelocity2 = new Vector3(0,0,0);
+                float cos = (float)System.Math.Cos(col_angle);
+                float sin = (float)System.Math.Sin(col_angle);
 
-                if(col_angle > 0.01f){
-                  Debug.Log(col_angle + " angel col");
-                  float[,] mat = createRotationMatrixFromAngle(col_angle);
-                  float[,] inv_mat = invertMatrix2x2(mat);
+                float vx1 = b.direction.x*cos+b.direction.y*sin;
+                float vy1 = b.direction.y*cos-b.direction.x*sin;
+                float vx2 = _b.direction.x*cos+_b.direction.y*sin;
+                float vy2 = _b.direction.y*cos-_b.direction.x*sin;
 
-                  Vector3 vel1 = matrix2x2MultiplyVector2(mat, b.direction);
-                  Vector3 vel2 = matrix2x2MultiplyVector2(mat, _b.direction);
+                float vx1final = (0 *vx1+2*1*vx2)/2;
+                float vx2final = (0 *vx2+2*1*vx1)/2;
 
-                  float vxTotal = vel1.x - vel2.x;
+                // update velocity
+                vx1 = vx1final;
+                vx2 = vx2final;
 
-                  vel1.x = collisionReboundSingleAxis(b, _b);
-                  vel2.x = vxTotal + vel1.x;
+                //rotate vel back
+                b.direction.x = vx1*cos-vy1*sin;
+                b.direction.y = vy1*cos+vx1*sin;
+                _b.direction.x = vx2*cos-vy2*sin;
+                _b.direction.y = vy2*cos+vx2*sin;
 
-                  reboundVelocity1 = matrix2x2MultiplyVector2(inv_mat, vel2);
-                  reboundVelocity2 = matrix2x2MultiplyVector2(inv_mat, vel1);
+                b.setDirection(b.direction, _b.velocity);
 
-                  if(Vector3.Dot(vel1, vel2) > 0.0) {
-                      vel1.x *= -1;
-                    }
-                    // position adjustment
-                  Vector3 particle1Adjustment = matrix2x2MultiplyVector2(inv_mat, new Vector3(0, 0, 0));
-                  b.transform.position += particle1Adjustment;
-                  _b.transform.position = b.transform.position + ogDistance;
-
-                }
-
-                b.setDirection(reboundVelocity1, _b.velocity);
-
-                _b.setDirection(reboundVelocity2, temp_vel);
+                _b.setDirection(_b.direction, temp_vel);
 
                 // b.setDirection(_b.direction, _b.velocity);
                 //
@@ -133,6 +104,11 @@ public class BallHandler : MonoBehaviour
             }
         }
     }
+
+    void move(Ball b){
+      b.transform.position += b.direction.normalized * b.velocity * Time.deltaTime;
+    }
+
 
     bool CheckEnvCollision(Ball b)
     {

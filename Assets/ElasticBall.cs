@@ -34,8 +34,8 @@ public class ElasticBall : Ball
         velocity = this.velocity * -1;
     }
 
-    //over engineering apperently ¯\_(ツ)_/¯
-    /*//Ekin(0) + Epot(0) = Ekin(1) + Epot(1) rewritten as V(after) = .... to calculate velocity where g = 9.8 and mass is equal
+    //¯\_(ツ)_/¯
+    /*//Ekin(0) + Epot(0) = Ekin(1) + Epot(1) rewritten as V(after) =
     float calculateVelocity(float y_before, float y_after, float currentVelocity, float deltaTime)
     {
         float val = (float)System.Math.Sqrt(System.Math.Abs((5 * System.Math.Pow(currentVelocity, 2.00) + 98 * y_before - 98 * y_after) / 5));
